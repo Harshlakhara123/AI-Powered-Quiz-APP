@@ -1,15 +1,73 @@
-export default function Dashboard() {
+import { Home, Users, FileText, Briefcase, Library, Settings } from "lucide-react";
+
+// Define the type for our user data to keep TypeScript happy
+interface DashboardProps {
+  userData?: {
+    schoolName: string;
+    schoolTown: string;
+  };
+}
+
+const navItems = [
+  { icon: Home, label: "Home", active: false },
+  { icon: Users, label: "My Groups", active: false },
+  { icon: FileText, label: "Assignments", active: true },
+  { icon: Briefcase, label: "AI Teacher's Toolkit", active: false },
+  { icon: Library, label: "My Library", active: false },
+];
+
+export default function Dashboard({ userData }: DashboardProps) {
+  // Fallback data in case the database hasn't loaded yet
+  const displaySchool = userData?.schoolName || "Loading school...";
+  const displayTown = userData?.schoolTown || "Loading location...";
+
   return (
-    <div className="h-full flex flex-col bg-white border-r border-gray-200 shadow-sm">
-      <div className="p-6 border-b">
-        <h2 className="text-xl font-bold text-gray-800">Control Panel</h2>
+    <div className="h-full flex flex-col bg-white p-6 shadow-sm rounded-r-[2rem] md:rounded-[2rem] text-slate-600">
+      {/* Logo Section */}
+      <div className="flex items-center gap-2 mb-10 px-2">
+        <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-2xl">
+          V
+        </div>
+        <span className="text-2xl font-bold text-slate-800">VedaAI</span>
       </div>
-      <div className="flex-1 p-6 overflow-y-auto">
-        <ul className="space-y-4">
-          <li className="p-4 bg-gray-50 rounded-xl text-base font-semibold text-black border border-gray-100 shadow-inner">Activity Log</li>
-          <li className="p-4 bg-gray-50 rounded-xl text-base font-semibold text-black border border-gray-100 shadow-inner">User Settings</li>
-          <li className="p-4 bg-gray-50 rounded-xl text-base font-semibold text-black border border-gray-100 shadow-inner">Analytics</li>
-        </ul>
+
+      {/* Primary Action Button */}
+      <button className="flex items-center justify-center gap-2 w-full bg-[#333] text-white py-4 rounded-full font-medium mb-10 border-2 border-orange-600/30 hover:bg-black transition-all">
+        <span className="text-xl">+</span> Create Assignment
+      </button>
+
+      {/* Navigation Links */}
+      <nav className="flex-1 space-y-2">
+        {navItems.map((item) => (
+          <div
+            key={item.label}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-colors ${item.active ? "bg-slate-100 text-slate-900 font-semibold" : "hover:bg-slate-50"
+              }`}
+          >
+            <item.icon size={20} className={item.active ? "text-slate-900" : "text-slate-400"} />
+            <span className="text-sm">{item.label}</span>
+          </div>
+        ))}
+      </nav>
+
+      {/* Bottom Section */}
+      <div className="mt-auto space-y-4">
+        {/* Settings Link */}
+        <div className="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 rounded-xl cursor-pointer mb-2">
+          <Settings size={20} className="text-slate-400" />
+          <span className="text-sm">Settings</span>
+        </div>
+
+        {/* User/School Profile Card */}
+        <div className="bg-slate-50 p-3 rounded-2xl flex items-center gap-3">
+          <div className="w-10 h-10 bg-orange-200 rounded-full flex-shrink-0">
+            {/* Placeholder for User Avatar */}
+          </div>
+          <div className="overflow-hidden">
+            <p className="text-xs font-bold text-slate-800 truncate">{displaySchool}</p>
+            <p className="text-[10px] text-slate-400">{displayTown}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
