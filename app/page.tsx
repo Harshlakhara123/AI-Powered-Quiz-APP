@@ -1,7 +1,6 @@
 export default function Home() {
   return (
     <div className="h-full flex flex-col items-center justify-center p-10 text-center">
-      {/* Placeholder for the illustration in your image */}
       <div className="relative w-64 h-64 mb-8">
          <div className="absolute inset-0 bg-white/50 rounded-full scale-110"></div>
          <div className="relative flex items-center justify-center h-full text-8xl">📄</div>
