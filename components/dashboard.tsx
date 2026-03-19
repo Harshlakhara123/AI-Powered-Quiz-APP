@@ -1,6 +1,5 @@
 import { Home, Users, FileText, Briefcase, Library, Settings } from "lucide-react";
 
-// Define the type for our user data to keep TypeScript happy
 interface DashboardProps {
   userData?: {
     schoolName: string;
@@ -17,13 +16,11 @@ const navItems = [
 ];
 
 export default function Dashboard({ userData }: DashboardProps) {
-  // Fallback data in case the database hasn't loaded yet
   const displaySchool = userData?.schoolName || "Loading school...";
   const displayTown = userData?.schoolTown || "Loading location...";
 
   return (
     <div className="h-full flex flex-col bg-white p-6 shadow-sm rounded-r-[2rem] md:rounded-[2rem] text-slate-600">
-      {/* Logo Section */}
       <div className="flex items-center gap-2 mb-10 px-2">
         <div className="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-2xl">
           V
@@ -31,12 +28,10 @@ export default function Dashboard({ userData }: DashboardProps) {
         <span className="text-2xl font-bold text-slate-800">VedaAI</span>
       </div>
 
-      {/* Primary Action Button */}
       <button className="flex items-center justify-center gap-2 w-full bg-[#333] text-white py-4 rounded-full font-medium mb-10 border-2 border-orange-600/30 hover:bg-black transition-all">
         <span className="text-xl">+</span> Create Assignment
       </button>
 
-      {/* Navigation Links */}
       <nav className="flex-1 space-y-2">
         {navItems.map((item) => (
           <div
@@ -50,18 +45,14 @@ export default function Dashboard({ userData }: DashboardProps) {
         ))}
       </nav>
 
-      {/* Bottom Section */}
       <div className="mt-auto space-y-4">
-        {/* Settings Link */}
         <div className="flex items-center gap-3 px-4 py-2 hover:bg-slate-50 rounded-xl cursor-pointer mb-2">
           <Settings size={20} className="text-slate-400" />
           <span className="text-sm">Settings</span>
         </div>
 
-        {/* User/School Profile Card */}
         <div className="bg-slate-50 p-3 rounded-2xl flex items-center gap-3">
           <div className="w-10 h-10 bg-orange-200 rounded-full flex-shrink-0">
-            {/* Placeholder for User Avatar */}
           </div>
           <div className="overflow-hidden">
             <p className="text-xs font-bold text-slate-800 truncate">{displaySchool}</p>
