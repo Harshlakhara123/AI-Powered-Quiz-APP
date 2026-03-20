@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { login, signUp } from "@/lib/actions/auth";
+import { useRouter } from "next/navigation";
 
 type Mode = "login" | "signup";
 
 export default function AuthPage() {
+  const router = useRouter();
   const [mode, setMode] = useState<Mode>("login");
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +29,7 @@ export default function AuthPage() {
     if (result.error) {
       alert(result.error);
     } else {
-      alert(result.success);
+      router.push("/");
     }
   };
 

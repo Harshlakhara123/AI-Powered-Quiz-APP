@@ -1,4 +1,5 @@
 import { Home, Users, FileText, Briefcase, Library, Settings } from "lucide-react";
+import Link from "next/link";
 
 interface DashboardProps {
   userData?: {
@@ -28,9 +29,11 @@ export default function Dashboard({ userData }: DashboardProps) {
         <span className="text-2xl font-bold text-slate-800">VedaAI</span>
       </div>
 
-      <button className="flex items-center justify-center gap-2 w-full bg-[#333] text-white py-4 rounded-full font-medium mb-10 border-2 border-orange-600/30 hover:bg-black transition-all">
-        <span className="text-xl">+</span> Create Assignment
-      </button>
+      <Link href="/create" className="w-full">
+        <button className="flex items-center justify-center gap-2 w-full bg-[#333] text-white py-4 rounded-full font-medium mb-10 border-2 border-orange-600/30 hover:bg-black transition-all">
+          <span className="text-xl">+</span> Create Assignment
+        </button>
+      </Link>
 
       <nav className="flex-1 space-y-2">
         {navItems.map((item) => (
