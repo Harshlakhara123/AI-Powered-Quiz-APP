@@ -1,0 +1,5 @@
+Testing R2 connection...
+Endpoint: https://d695133a9469f8517cc77cf21acfb2ab.r2.cloudflarestorage.com
+Bucket: veda-ai
+Successfully connected to R2!
+Objects found: 0
