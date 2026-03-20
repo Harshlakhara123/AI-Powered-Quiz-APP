@@ -6,10 +6,11 @@ const AssignmentSchema = new Schema(
     title: { type: String, required: true },
     status: {
       type: String,
-      enum: ["pending", "completed"],
+      enum: ["pending", "processing", "completed"],
       default: "pending",
     },
     fileUrl: { type: String },
+    fileKey: { type: String },
     formMetadata: {
       type: Schema.Types.Mixed,
     },
