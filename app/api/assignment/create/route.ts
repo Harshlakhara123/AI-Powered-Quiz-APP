@@ -9,7 +9,7 @@ import { uploadToR2 } from "@/lib/r2";
 import { getAssignmentQueue } from "@/lib/queues/assignmentQueue";
 
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
-const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png"]);
+const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "application/pdf"]);
 
 function isFileLike(value: unknown): value is File {
   if (typeof value !== "object" || value === null) return false;
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     const mimeType = image.type || "";
     if (!ALLOWED_MIME_TYPES.has(mimeType)) {
       return NextResponse.json(
-        { error: "Invalid image type. Use JPEG or PNG." },
+        { error: "Invalid file type. Use JPEG, PNG, or PDF." },
         { status: 400 }
       );
     }

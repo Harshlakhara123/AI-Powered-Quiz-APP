@@ -37,7 +37,7 @@ export function AssignmentCard({ assignment }: { assignment: AssignmentType }) {
   const isPending = assignment.status === "pending" || assignment.status === "processing";
 
   return (
-    <Card className="rounded-[2rem] border-none shadow-sm hover:shadow-md transition-shadow relative overflow-hidden bg-white">
+    <Card className="rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden bg-white group">
       {isPending && (
         <div className="absolute top-0 left-0 w-full h-1 bg-orange-400 animate-pulse" />
       )}
@@ -51,7 +51,7 @@ export function AssignmentCard({ assignment }: { assignment: AssignmentType }) {
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-600 rounded-full">
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors rounded-full opacity-60 group-hover:opacity-100">
                 <MoreVertical size={16} />
               </Button>
             </DropdownMenuTrigger>
@@ -77,12 +77,12 @@ export function AssignmentCard({ assignment }: { assignment: AssignmentType }) {
         </div>
 
         <div className="flex justify-between items-center text-xs font-semibold text-slate-500">
-          <div className="flex items-center gap-1">
-            <span className="text-slate-400">Assigned on :</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-slate-400">Assigned on:</span>
             <span className="text-slate-700">{createdDate}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <span className="text-slate-400">Due :</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-slate-400">Due:</span>
             <span className="text-slate-700">{dueDate}</span>
           </div>
         </div>

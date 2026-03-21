@@ -3,8 +3,7 @@
 import dbConnect from "@/lib/dbConnect";
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
-import { setAuthCookie } from "@/lib/auth";
-
+import { setAuthCookie, clearAuthCookie } from "@/lib/auth";
 export async function signUp(formData: FormData) {
   try {
     await dbConnect();
@@ -73,4 +72,8 @@ export async function login(formData: FormData) {
       error instanceof Error ? error.message : "Unknown error";
     return { error: message };
   }
+}
+
+export async function logout() {
+  await clearAuthCookie();
 }

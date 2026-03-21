@@ -30,6 +30,7 @@ async function processJob(job: import("bullmq").Job<GenerateAssignmentJob>) {
   const generatedContent = await generateAssignmentContent({
     imageBase64: base64,
     mimeType: mimeType || "image/png",
+    formMetadata: assignment.formMetadata,
   });
 
   assignment.status = "completed";

@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -69,7 +69,7 @@ export function CreateForm() {
   const totalMarks = watchQuestionTypes.reduce((acc, curr) => acc + (Number(curr.count) || 0) * (Number(curr.marks) || 0), 0);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: { "image/jpeg": [], "image/png": [] },
+    accept: { "image/jpeg": [], "image/png": [], "application/pdf": [] },
     maxSize: 10 * 1024 * 1024,
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
@@ -110,6 +110,15 @@ export function CreateForm() {
     }
   };
 
+  useEffect(() => {
+    if (status === "completed" && generatedContent) {
+      const assignId = useCreateAssignmentStore.getState().assignmentId;
+      if (assignId) {
+        router.push(`/assignment/${assignId}`);
+      }
+    }
+  }, [status, generatedContent, router]);
+
   if (status === "uploading" || status === "processing") {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center h-full">
@@ -125,13 +134,7 @@ export function CreateForm() {
   }
 
   if (status === "completed" && generatedContent) {
-    // Actually, in a real app we would navigate to the assignment page ID. Let's redirect.
-    // The problem is we don't have assignmentId directly available here synchronously unless read from state.
-    const assignId = useCreateAssignmentStore.getState().assignmentId;
-    if (assignId) {
-      router.push(`/assignment/${assignId}`);
-      return null;
-    }
+    return null;
   }
 
   return (
@@ -144,11 +147,11 @@ export function CreateForm() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white p-8 rounded-[2rem] shadow-sm">
         
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Assignment Title</label>
+          <label className="block text-sm font-semibold text-slate-800 tracking-tight mb-2">Assignment Title</label>
           <Input 
             {...register("title")} 
             placeholder="e.g. Science Midterm Chapter 5" 
-            className="rounded-xl border-slate-200"
+            className="rounded-xl border-slate-200 shadow-sm focus-visible:ring-2 focus-visible:ring-orange-500/20 focus-visible:border-orange-500 transition-all duration-200"
           />
           {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
         </div>
@@ -156,47 +159,47 @@ export function CreateForm() {
         <div>
            <div 
              {...getRootProps()} 
-             className={`border-2 border-dashed rounded-3xl p-10 text-center cursor-pointer transition-colors
-               ${isDragActive ? "border-orange-500 bg-orange-50" : "border-slate-300 hover:border-slate-400"}
+             className={`border-2 border-dashed rounded-3xl p-10 text-center cursor-pointer transition-all duration-300 group
+               ${isDragActive ? "border-orange-500 bg-orange-50" : "border-slate-300 hover:border-orange-400 hover:bg-orange-50/30"}
                ${errors.file ? "border-red-500 bg-red-50" : ""}
              `}
            >
              <input {...getInputProps()} />
-             <CloudUpload size={40} className="text-slate-400 mx-auto mb-4" />
+             <CloudUpload size={40} className="text-slate-400 group-hover:text-orange-500 transition-colors duration-300 mx-auto mb-4" />
              {watchFile ? (
                <p className="font-semibold text-slate-700 mb-2">{watchFile.name}</p>
              ) : (
                <p className="font-semibold text-slate-700 mb-2">Choose a file or drag & drop it here</p>
              )}
-             <p className="text-xs text-slate-400 mb-6">JPEG, PNG, upto 10MB</p>
+             <p className="text-xs text-slate-400 mb-6">JPEG, PNG, PDF upto 10MB</p>
              <Button type="button" variant="outline" className="rounded-full px-6 border-slate-300">
                Browse Files
              </Button>
            </div>
            {errors.file && <p className="text-red-500 text-xs mt-2 text-center">{errors.file.message as string}</p>}
-           <p className="text-center text-xs text-slate-400 mt-3">Upload images of your preferred document/image</p>
+           <p className="text-center text-xs text-slate-400 mt-3">Upload your preferred document or image</p>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">Due Date</label>
+          <label className="block text-sm font-semibold text-slate-800 tracking-tight mb-2">Due Date</label>
           <div className="relative">
             <Input 
                type="date"
                {...register("dueDate")} 
-               className="rounded-xl border-slate-200 w-full"
+               className="rounded-xl border-slate-200 w-full shadow-sm focus-visible:ring-2 focus-visible:ring-orange-500/20 focus-visible:border-orange-500 transition-all duration-200"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-4">Question Type</label>
+          <label className="block text-sm font-semibold text-slate-800 tracking-tight mb-4">Question Type</label>
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-4 items-center bg-slate-50 p-4 rounded-2xl border border-slate-100 relative">
+              <div key={field.id} className="flex gap-4 items-center bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm relative group">
                 <div className="flex-1">
                   <select
                     {...register(`questionTypes.${index}.type` as const)}
-                    className="w-full bg-transparent font-medium text-slate-700 border-none outline-none appearance-none cursor-pointer"
+                    className="w-full bg-transparent font-medium text-slate-700 border-none outline-none appearance-none cursor-pointer focus:ring-2 focus:ring-orange-500/20 rounded-md py-1"
                   >
                     {questionTypeOptions.map((opt) => (
                       <option key={opt} value={opt}>{opt}</option>
@@ -208,20 +211,20 @@ export function CreateForm() {
 
                 <div className="flex items-center gap-6">
                   <div className="flex flex-col items-center">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold mb-1">No. of Questions</span>
-                    <div className="flex items-center bg-white rounded-full px-3 py-1 border border-slate-200">
-                       <button type="button" onClick={() => setValue(`questionTypes.${index}.count`, Math.max(1, watchQuestionTypes[index]?.count - 1))} className="text-slate-400 hover:text-slate-700">-</button>
-                       <Input type="number" {...register(`questionTypes.${index}.count` as const, { valueAsNumber: true })} className="w-10 text-center border-none p-0 h-6 focus-visible:ring-0 mx-2" />
-                       <button type="button" onClick={() => setValue(`questionTypes.${index}.count`, watchQuestionTypes[index]?.count + 1)} className="text-slate-400 hover:text-slate-700">+</button>
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold mb-1 tracking-wider">No. of Questions</span>
+                    <div className="flex items-center bg-white rounded-xl shadow-sm border border-slate-200 p-0.5">
+                       <button type="button" onClick={() => setValue(`questionTypes.${index}.count`, Math.max(1, watchQuestionTypes[index]?.count - 1))} className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors text-slate-500 hover:text-slate-800 font-medium">-</button>
+                       <Input type="number" {...register(`questionTypes.${index}.count` as const, { valueAsNumber: true })} className="w-10 text-center border-none p-0 h-7 focus-visible:ring-0 mx-1 font-semibold text-slate-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                       <button type="button" onClick={() => setValue(`questionTypes.${index}.count`, watchQuestionTypes[index]?.count + 1)} className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors text-slate-500 hover:text-slate-800 font-medium">+</button>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-center">
-                    <span className="text-[10px] text-slate-400 uppercase font-semibold mb-1">Marks</span>
-                    <div className="flex items-center bg-white rounded-full px-3 py-1 border border-slate-200">
-                       <button type="button" onClick={() => setValue(`questionTypes.${index}.marks`, Math.max(1, watchQuestionTypes[index]?.marks - 1))} className="text-slate-400 hover:text-slate-700">-</button>
-                       <Input type="number" {...register(`questionTypes.${index}.marks` as const, { valueAsNumber: true })} className="w-10 text-center border-none p-0 h-6 focus-visible:ring-0 mx-2" />
-                       <button type="button" onClick={() => setValue(`questionTypes.${index}.marks`, watchQuestionTypes[index]?.marks + 1)} className="text-slate-400 hover:text-slate-700">+</button>
+                    <span className="text-[10px] text-slate-400 uppercase font-semibold mb-1 tracking-wider">Marks</span>
+                    <div className="flex items-center bg-white rounded-xl shadow-sm border border-slate-200 p-0.5">
+                       <button type="button" onClick={() => setValue(`questionTypes.${index}.marks`, Math.max(1, watchQuestionTypes[index]?.marks - 1))} className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors text-slate-500 hover:text-slate-800 font-medium">-</button>
+                       <Input type="number" {...register(`questionTypes.${index}.marks` as const, { valueAsNumber: true })} className="w-10 text-center border-none p-0 h-7 focus-visible:ring-0 mx-1 font-semibold text-slate-800 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+                       <button type="button" onClick={() => setValue(`questionTypes.${index}.marks`, watchQuestionTypes[index]?.marks + 1)} className="w-7 h-7 rounded-lg hover:bg-slate-100 flex items-center justify-center transition-colors text-slate-500 hover:text-slate-800 font-medium">+</button>
                     </div>
                   </div>
                 </div>
@@ -229,7 +232,7 @@ export function CreateForm() {
                 <button 
                   type="button" 
                   onClick={() => remove(index)}
-                  className="absolute -right-2 -top-2 bg-white rounded-full p-1 shadow-sm border border-slate-100 text-slate-400 hover:text-red-500"
+                  className="absolute -right-2 -top-2 bg-white rounded-full p-1.5 shadow-sm border border-slate-100 text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors duration-200 opacity-0 group-hover:opacity-100"
                 >
                    <X size={14} />
                 </button>
@@ -253,15 +256,15 @@ export function CreateForm() {
         </div>
 
         <div>
-           <label className="block text-sm font-semibold text-slate-700 mb-2">Additional Information (For better output)</label>
-           <div className="relative">
+           <label className="block text-sm font-semibold text-slate-800 tracking-tight mb-2">Additional Information (For better output)</label>
+           <div className="relative group">
              <Textarea 
                {...register("additionalInfo")} 
                placeholder="e.g Generate a question paper for 3 hour exam duration..." 
-               className="rounded-2xl border-slate-200 resize-none min-h-[100px] pr-12 pb-10"
+               className="rounded-2xl border-slate-200 shadow-sm resize-none min-h-[100px] pr-12 pb-10 focus-visible:ring-2 focus-visible:ring-orange-500/20 focus-visible:border-orange-500 transition-all duration-200"
              />
-             <div className="absolute right-3 bottom-3 p-2 bg-slate-100 rounded-full cursor-pointer hover:bg-slate-200">
-               <Mic size={18} className="text-slate-500" />
+             <div className="absolute right-3 bottom-3 p-2.5 bg-slate-50 text-slate-400 rounded-xl cursor-pointer hover:bg-orange-50 hover:text-orange-500 transition-colors duration-200 ring-1 ring-slate-200/50">
+               <Mic size={18} />
              </div>
            </div>
         </div>
