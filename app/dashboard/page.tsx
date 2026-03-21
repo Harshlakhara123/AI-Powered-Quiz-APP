@@ -31,7 +31,7 @@ export default async function DashboardPage() {
       </h1>
       
       <p className="text-lg md:text-xl text-slate-600 max-w-2xl mb-12 leading-relaxed">
-        Your ultimate AI-powered quiz generator. Transform existing materials into engaging, structured assessments instantly, tailored to your students' unique needs.
+        Your ultimate AI-powered quiz generator. Transform existing materials into engaging, structured assessments instantly, tailored to your students&apos; unique needs.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl mb-12">

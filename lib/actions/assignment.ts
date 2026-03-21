@@ -7,8 +7,8 @@ import { verifyAuthToken } from "@/lib/auth";
 
 export async function updateAssignmentAction(
   assignmentId: string, 
-  generatedContent: any, 
-  formMetadata: any
+  generatedContent: unknown, 
+  formMetadata: unknown
 ) {
   try {
     const cookieStore = await cookies();
@@ -33,7 +33,8 @@ export async function updateAssignmentAction(
     }
 
     return { success: true };
-  } catch (error: any) {
+  } catch (err: unknown) {
+    const error = err as Error;
     return { error: error.message || "Failed to update assignment." };
   }
 }

@@ -29,7 +29,7 @@ function coerceToJson(text: string): unknown {
 export async function generateAssignmentContent(params: {
   imageBase64: string;
   mimeType: string;
-  formMetadata?: Record<string, any>;
+  formMetadata?: Record<string, unknown>;
 }): Promise<GeminiGeneratedQuiz> {
   const apiKey = env("GEMINI_API_KEY");
   if (!apiKey) {
@@ -43,7 +43,7 @@ export async function generateAssignmentContent(params: {
     constraintsPrompt = "\n\nSTRICT CONSTRAINTS FROM USER:";
     if (params.formMetadata.questionTypes && Array.isArray(params.formMetadata.questionTypes)) {
       constraintsPrompt += "\nYou MUST perfectly match this exact question distribution and marks:";
-      params.formMetadata.questionTypes.forEach((qt: any) => {
+      params.formMetadata.questionTypes.forEach((qt: { count: number; type: string; marks: number }) => {
         constraintsPrompt += `\n- Generate exactly ${qt.count} question(s) of type "${qt.type}", each worth exactly ${qt.marks} marks.`;
       });
     }

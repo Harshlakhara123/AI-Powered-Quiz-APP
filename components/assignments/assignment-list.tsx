@@ -35,11 +35,11 @@ export function AssignmentList({ assignments }: AssignmentListProps) {
       } else if (sortBy === "alpha-desc") {
         return b.title.localeCompare(a.title);
       } else if (sortBy === "date-asc") {
-        // @ts-ignore
+        // @ts-expect-error expected date coercion
         return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
       } else {
         // date-desc default
-        // @ts-ignore
+        // @ts-expect-error expected date coercion
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
     });
@@ -93,7 +93,7 @@ export function AssignmentList({ assignments }: AssignmentListProps) {
           ))
         ) : (
           <div className="col-span-full py-12 text-center text-slate-500">
-            No assignments found matching "{searchQuery}"
+            No assignments found matching &quot;{searchQuery}&quot;
           </div>
         )}
       </div>

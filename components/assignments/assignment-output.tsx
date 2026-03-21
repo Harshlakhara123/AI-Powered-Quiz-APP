@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Download, ChevronLeft, Trash2, Loader2, Printer } from "lucide-react";
+import { ChevronLeft, Trash2, Loader2, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { updateAssignmentAction } from "@/lib/actions/assignment";
@@ -43,7 +43,7 @@ export function AssignmentOutput({ assignment, user }: { assignment: OutputAssig
   
   const totalMarks = localAssignment.formMetadata?.totalMarks || 0;
 
-  const saveChanges = async (newContent: any, newFormMetadata: any) => {
+  const saveChanges = async (newContent: unknown, newFormMetadata: unknown) => {
     setIsSaving(true);
     await updateAssignmentAction(localAssignment._id, newContent, newFormMetadata);
     setIsSaving(false);

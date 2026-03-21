@@ -4,12 +4,9 @@ import { redirect } from "next/navigation";
 import dbConnect from "@/lib/dbConnect";
 import Assignment from "@/models/assignment";
 import { EmptyState } from "@/components/assignments/empty-state";
-import { AssignmentCard, type AssignmentType } from "@/components/assignments/assignment-card";
 import { AssignmentList } from "@/components/assignments/assignment-list";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 
 export default async function AssignmentsPage() {
   const cookieStore = await cookies();

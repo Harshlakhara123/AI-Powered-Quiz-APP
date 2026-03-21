@@ -110,6 +110,15 @@ export function CreateForm() {
     }
   };
 
+  useEffect(() => {
+    if (status === "completed" && generatedContent) {
+      const assignId = useCreateAssignmentStore.getState().assignmentId;
+      if (assignId) {
+        router.push(`/assignment/${assignId}`);
+      }
+    }
+  }, [status, generatedContent, router]);
+
   if (status === "uploading" || status === "processing") {
     return (
       <div className="flex flex-col items-center justify-center p-20 text-center h-full">
@@ -123,15 +132,6 @@ export function CreateForm() {
       </div>
     );
   }
-
-  useEffect(() => {
-    if (status === "completed" && generatedContent) {
-      const assignId = useCreateAssignmentStore.getState().assignmentId;
-      if (assignId) {
-        router.push(`/assignment/${assignId}`);
-      }
-    }
-  }, [status, generatedContent, router]);
 
   if (status === "completed" && generatedContent) {
     return null;
