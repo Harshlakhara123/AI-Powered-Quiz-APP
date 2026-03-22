@@ -136,7 +136,7 @@ export function AssignmentOutput({ assignment, user }: { assignment: OutputAssig
 
       {/* The Printable Paper Area */}
       <div 
-        className="bg-white rounded-[2rem] shadow-sm overflow-hidden" 
+        className="bg-white rounded-[2rem] shadow-sm overflow-hidden print:overflow-visible print:shadow-none print:rounded-none" 
         style={{ minHeight: '800px' }}
       >
         <div className="p-10 md:p-16 text-black">
@@ -197,7 +197,7 @@ export function AssignmentOutput({ assignment, user }: { assignment: OutputAssig
                        <div className="flex-1">
                          <div className="flex justify-between items-start gap-4 mb-2">
                            <div className="flex-1 mt-1">
-                             <span className="mr-2">
+                             <span className="mr-2 print:hidden">
                                <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border ${diffColor}`}>
                                  {q.difficulty || "Moderate"}
                                </span>
@@ -206,16 +206,17 @@ export function AssignmentOutput({ assignment, user }: { assignment: OutputAssig
                            </div>
                             <div className="flex items-center gap-1 font-semibold whitespace-nowrap shrink-0 ml-4 py-1">
                               [
+                              <span className="hidden print:inline">{q.marks}</span>
                               <input 
                                  type="number" 
-                                 className="w-10 text-center bg-transparent border border-transparent rounded-md hover:bg-orange-50/50 focus:bg-orange-50/50 focus:border-orange-500/30 focus:ring-4 focus:ring-orange-500/10 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition-all duration-200"
+                                 className="print:hidden w-10 text-center bg-transparent border border-transparent rounded-md hover:bg-orange-50/50 focus:bg-orange-50/50 focus:border-orange-500/30 focus:ring-4 focus:ring-orange-500/10 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none transition-all duration-200"
                                  value={q.marks}
                                  onChange={(e) => handleMarksChange(idx, qIdx, Number(e.target.value))}
                               /> 
                               Marks]
                               <button 
                                 onClick={() => handleDeleteQuestion(idx, qIdx)} 
-                                className="text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all duration-200 opacity-0 group-hover:opacity-100 absolute -right-10 top-1 p-1.5 rounded-full"
+                                className="print:hidden text-slate-300 hover:text-red-500 hover:bg-red-50 transition-all duration-200 opacity-0 group-hover:opacity-100 absolute -right-10 top-1 p-1.5 rounded-full"
                                 title="Delete Question"
                               >
                                 <Trash2 size={16} />

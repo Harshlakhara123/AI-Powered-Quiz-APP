@@ -27,21 +27,39 @@ async function processJob(job: import("bullmq").Job<GenerateAssignmentJob>) {
   const imageBuffer = await downloadFromR2({ key: fileKey });
   const base64 = imageBuffer.toString("base64");
 
-  const generatedContent = await generateAssignmentContent({
-    imageBase64: base64,
-    mimeType: mimeType || "image/png",
-    formMetadata: assignment.formMetadata,
-  });
+  try {
+    const generatedContent = await generateAssignmentContent({
+      imageBase64: base64,
+      mimeType: mimeType || "image/png",
+      formMetadata: assignment.formMetadata,
+    });
 
-  assignment.status = "completed";
-  assignment.generatedContent = generatedContent;
-  await assignment.save();
+    assignment.status = "completed";
+    assignment.generatedContent = generatedContent;
+    await assignment.save();
 
-  const io = startWsGateway();
-  io.to(assignmentId).emit("generation_complete", {
-    assignmentId,
-    generatedContent,
-  });
+    const io = startWsGateway();
+    io.to(assignmentId).emit("generation_complete", {
+      assignmentId,
+      generatedContent,
+    });
+  } catch (error: unknown) {
+    assignment.status = "failed";
+    await assignment.save();
+
+    const err = error as Error;
+    let errorMessage = "An error occurred during generation.";
+    if (err?.message && (err.message.includes("429") || err.message.toLowerCase().includes("quota") || err.message.toLowerCase().includes("rate limit"))) {
+      errorMessage = "rate limits is exceeded in the app , please retry after sometime";
+    }
+
+    const io = startWsGateway();
+    io.to(assignmentId).emit("generation_failed", {
+      assignmentId,
+      error: errorMessage,
+    });
+    throw error;
+  }
 }
 
 async function main() {

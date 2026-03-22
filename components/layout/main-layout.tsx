@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/lib/actions/auth";
+import { toast } from "sonner";
 
 interface UserLayoutInfo {
   name: string;
@@ -20,20 +21,22 @@ interface UserLayoutInfo {
 function LayoutContent({
   children,
   user,
+  activeAssignmentCount = 0,
 }: {
   children: React.ReactNode;
   user?: UserLayoutInfo;
+  activeAssignmentCount?: number;
 }) {
   const { isOpen, closeSidebar, toggleSidebar } = useSidebar();
 
   const displayName = user?.name ?? "Guest";
 
   return (
-    <div className="flex h-screen w-full bg-[#E5E5E5] p-0 md:p-6 overflow-hidden">
+    <div className="flex h-screen w-full bg-[#E5E5E5] p-0 md:p-6 overflow-hidden print:h-auto print:bg-white print:p-0 print:overflow-visible">
       <aside
         className={`
         fixed inset-y-0 left-0 z-50 w-72 transform transition-transform duration-300 ease-in-out
-        md:relative md:translate-x-0
+        md:relative md:translate-x-0 print:hidden
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
       `}
       >
@@ -44,17 +47,18 @@ function LayoutContent({
               schoolTown: user.schoolTown,
             }
           }
+          activeAssignmentCount={activeAssignmentCount}
         />
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0 md:ml-6">
-        <header className="bg-white/80 backdrop-blur-md rounded-[1.5rem] mb-6 px-6 py-3 flex items-center justify-between shadow-sm">
+      <main className="flex-1 flex flex-col min-w-0 md:ml-6 print:m-0">
+        <header className="bg-white/80 backdrop-blur-md rounded-[1.5rem] mb-6 px-6 py-3 flex items-center justify-between shadow-sm print:hidden">
           <div className="flex items-center gap-4 text-slate-400">
             <button className="p-2 hover:bg-slate-100 rounded-full md:hidden" onClick={toggleSidebar}>←</button>
             <span className="text-sm font-medium">Assignment</span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="relative">
+            <div className="relative cursor-pointer hover:scale-105 transition-transform" onClick={() => toast.info("Notifications coming soon!")}>
               <span className="absolute top-0 right-0 w-2 h-2 bg-orange-500 rounded-full border-2 border-white"></span>
               <span className="text-xl">🔔</span>
             </div>
@@ -82,12 +86,14 @@ function LayoutContent({
           </div>
         </header>
 
-        <div className="flex-1 bg-[#F5F5F5] rounded-[2rem] overflow-y-auto relative pb-32 md:pb-0">
+        <div className="flex-1 bg-[#F5F5F5] rounded-[2rem] overflow-y-auto relative pb-32 md:pb-0 print:bg-white print:overflow-visible print:p-0 print:rounded-none">
           {children}
         </div>
       </main>
 
-      <BottomNav />
+      <div className="print:hidden">
+        <BottomNav />
+      </div>
 
       {isOpen && (
         <div
@@ -102,13 +108,15 @@ function LayoutContent({
 export default function MainLayout({
   children,
   user,
+  activeAssignmentCount = 0,
 }: {
   children: React.ReactNode;
   user?: UserLayoutInfo;
+  activeAssignmentCount?: number;
 }) {
   return (
     <SidebarProvider>
-      <LayoutContent user={user}>{children}</LayoutContent>
+      <LayoutContent user={user} activeAssignmentCount={activeAssignmentCount}>{children}</LayoutContent>
     </SidebarProvider>
   );
 }

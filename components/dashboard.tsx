@@ -15,19 +15,20 @@ interface DashboardProps {
     schoolName: string;
     schoolTown: string;
   };
+  activeAssignmentCount?: number;
 }
 
 import { usePathname } from "next/navigation";
 
 const navItems = [
   { icon: Home, label: "Home", href: "/dashboard" },
-  { icon: Users, label: "My Groups", href: "#" },
+  { icon: Users, label: "My Groups", href: "/groups" },
   { icon: FileText, label: "Assignments", href: "/" },
-  { icon: Briefcase, label: "AI Teacher's Toolkit", href: "#" },
-  { icon: Library, label: "My Library", href: "#" },
+  { icon: Briefcase, label: "AI Teacher's Toolkit", href: "/ai-toolkit" },
+  { icon: Library, label: "My Library", href: "/library" },
 ];
 
-export default function Dashboard({ userData }: DashboardProps) {
+export default function Dashboard({ userData, activeAssignmentCount }: DashboardProps) {
   const displaySchool = userData?.schoolName || "Loading school...";
   const displayTown = userData?.schoolTown || "Loading location...";
   const pathname = usePathname();
@@ -66,17 +67,24 @@ export default function Dashboard({ userData }: DashboardProps) {
               }`}
             >
               <item.icon size={20} className={isActive ? "text-slate-900" : "text-slate-400 opacity-80"} />
-              <span className="text-sm">{item.label}</span>
+              <div className="flex-1 flex justify-between items-center pr-2">
+                <span className="text-sm">{item.label}</span>
+                {item.label === "Assignments" && activeAssignmentCount != null && activeAssignmentCount > 0 && (
+                  <span className="bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                    {activeAssignmentCount}
+                  </span>
+                )}
+              </div>
             </Link>
           );
         })}
       </nav>
 
       <div className="mt-auto space-y-4">
-        <div className="flex items-center gap-3 px-4 py-3 hover:bg-slate-100/80 text-slate-500 hover:text-slate-800 transition-colors duration-200 rounded-xl cursor-pointer mb-2">
+        <Link href="/settings" className="flex items-center gap-3 px-4 py-3 hover:bg-slate-100/80 text-slate-500 hover:text-slate-800 transition-colors duration-200 rounded-xl cursor-pointer mb-2">
           <Settings size={20} className="text-slate-400 opacity-80" />
           <span className="text-sm">Settings</span>
-        </div>
+        </Link>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
