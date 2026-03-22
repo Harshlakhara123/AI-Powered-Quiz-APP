@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useDropzone } from "react-dropzone";
@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
+import { toast } from "sonner";
 const questionTypeOptions = [
   "Multiple Choice Questions",
   "Short Questions",
@@ -62,8 +62,8 @@ export function CreateForm() {
     name: "questionTypes",
   });
 
-  const watchQuestionTypes = watch("questionTypes");
-  const watchFile = watch("file");
+  const watchQuestionTypes = useWatch({ control, name: "questionTypes", defaultValue: [{ type: "Multiple Choice Questions", count: 4, marks: 1 }] });
+  const watchFile = useWatch({ control, name: "file" });
 
   const totalQuestions = watchQuestionTypes.reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
   const totalMarks = watchQuestionTypes.reduce((acc, curr) => acc + (Number(curr.count) || 0) * (Number(curr.marks) || 0), 0);
@@ -118,6 +118,12 @@ export function CreateForm() {
       }
     }
   }, [status, generatedContent, router]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   if (status === "uploading" || status === "processing") {
     return (
@@ -263,7 +269,10 @@ export function CreateForm() {
                placeholder="e.g Generate a question paper for 3 hour exam duration..." 
                className="rounded-2xl border-slate-200 shadow-sm resize-none min-h-[100px] pr-12 pb-10 focus-visible:ring-2 focus-visible:ring-orange-500/20 focus-visible:border-orange-500 transition-all duration-200"
              />
-             <div className="absolute right-3 bottom-3 p-2.5 bg-slate-50 text-slate-400 rounded-xl cursor-pointer hover:bg-orange-50 hover:text-orange-500 transition-colors duration-200 ring-1 ring-slate-200/50">
+             <div 
+               className="absolute right-3 bottom-3 p-2.5 bg-slate-50 text-slate-400 rounded-xl cursor-pointer hover:bg-orange-50 hover:text-orange-500 transition-colors duration-200 ring-1 ring-slate-200/50"
+               onClick={() => toast.info("Voice input is coming soon!")}
+             >
                <Mic size={18} />
              </div>
            </div>
