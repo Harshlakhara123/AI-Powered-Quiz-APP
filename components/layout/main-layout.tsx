@@ -10,6 +10,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { logout } from "@/lib/actions/auth";
+import { ChevronDown } from "lucide-react";
 
 interface UserLayoutInfo {
   name: string;
@@ -62,8 +63,8 @@ function LayoutContent({
               <DropdownMenuTrigger asChild>
                 <div className="flex items-center gap-2 bg-slate-50 p-1 pr-3 rounded-full border border-slate-100 cursor-pointer hover:bg-slate-100 transition-colors">
                   <div className="w-8 h-8 bg-orange-100 rounded-full" />
-                  <span className="text-xs font-bold text-slate-800">
-                    {displayName} ∨
+                  <span className="text-xs font-bold text-slate-800 flex items-center gap-1">
+                    {displayName} <ChevronDown size={14} className="opacity-50" />
                   </span>
                 </div>
               </DropdownMenuTrigger>
