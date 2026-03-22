@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search } from "lucide-react";
+import { Search, ListFilter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AssignmentCard, type AssignmentType } from "@/components/assignments/assignment-card";
@@ -63,8 +63,8 @@ export function AssignmentList({ assignments }: AssignmentListProps) {
         <div className="flex border-r border-slate-100 pr-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="text-slate-500 font-medium rounded-xl hover:bg-slate-100 transition-colors h-11 px-4">
-                <span className="mr-2 opacity-50">Y</span> {getSortLabel()}
+              <Button variant="ghost" className="text-slate-500 font-medium rounded-xl hover:bg-slate-100 transition-colors h-11 px-4 flex items-center">
+                <ListFilter size={16} className="mr-2 opacity-50" /> {getSortLabel()}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="rounded-2xl shadow-lg border-slate-100">

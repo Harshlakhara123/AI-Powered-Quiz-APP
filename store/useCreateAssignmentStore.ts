@@ -37,6 +37,13 @@ export const useCreateAssignmentStore = create<CreateAssignmentState>((set, get)
       }
     });
 
+    socket.on("generation_failed", (payload: { assignmentId: string; error: string }) => {
+      if (payload?.assignmentId === assignmentId) {
+        get().setError(payload.error);
+        socket.disconnect();
+      }
+    });
+
     socket.on("connect_error", (err) => {
       console.error("WebSocket connection error:", err);
       // Wait for fallback polling or handle error? For now we just keep processing...
